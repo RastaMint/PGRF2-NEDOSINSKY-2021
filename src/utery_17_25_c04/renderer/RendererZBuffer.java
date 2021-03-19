@@ -1,5 +1,6 @@
 package utery_17_25_c04.renderer;
 
+import utery_17_25_c04.controller.Controller3D;
 import utery_17_25_c04.transforms.*;
 import utery_17_25_c04.model.Element;
 import utery_17_25_c04.model.TopologyType;
@@ -7,6 +8,7 @@ import utery_17_25_c04.model.Vertex;
 import utery_17_25_c04.rasterize.DepthBuffer;
 import utery_17_25_c04.rasterize.Raster;
 
+import javax.naming.ldap.Control;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,75 +114,48 @@ public class RendererZBuffer implements GPURenderer {
 
         a = transformToWindow(a);
         b = transformToWindow(b);
+
         //rozvětvit dle řídící osy
-        if (a.getX() < b.getX()) {
+
+        double dx = Math.abs(b.getX() - a.getX());
+        double dy = Math.abs(b.getY() - a.getY());
+        double k = dx / dy;
+        if (k < 1) {
 
 
             if (a.getY() > b.getY()) {
                 Vertex temp = a;
                 a = b;
                 b = temp;
-
-
-                long start = (long) Math.max(Math.ceil(a.getY()), 0);
-                long end = (long) Math.min(b.getY(), raster.getHeight() - 1);
-                for (long y = start; y <= end; y++) {
-                    double t1 = (y - a.getY()) / (b.getY() - a.getY());
-                    Vertex ab = a.mul(1 - t1).add(b.mul(t1));
-
-
-                    drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
-                }
-            } else if (a.getY() > b.getY()) {
-                Vertex temp = a;
-                a = b;
-                b = temp;
-
-
-                long start = (long) Math.max(Math.ceil(a.getX()), 0);
-                long end = (long) Math.min(b.getX(), raster.getHeight() - 1);
-                for (long x = start; x <= end; x++) {
-                    double t1 = (x - a.getX()) / (b.getX() - a.getX());
-                    Vertex ab = a.mul(1 - t1).add(b.mul(t1));
-
-
-                    drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
-                }
-
             }
-        } else if (a.getX() > b.getX()) {
-            if (a.getY() < b.getY()) {
+
+
+            long start = (long) Math.max(Math.ceil(a.getY()), 0);
+            long end = (long) Math.min(b.getY(), raster.getHeight() - 1);
+            for (long y = start; y <= end; y++) {
+                double t1 = (y - a.getY()) / (b.getY() - a.getY());
+                Vertex ab = a.mul(1 - t1).add(b.mul(t1));
+
+
+                drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
+            }
+
+        } else {
+            if (a.getX() > b.getX()) {
                 Vertex temp = a;
                 a = b;
                 b = temp;
+            }
 
 
-                long start = (long) Math.max(Math.ceil(a.getX()), 0);
-                long end = (long) Math.min(b.getX(), raster.getHeight() - 1);
-                for (long x = start; x <= end; x++) {
-                    double t1 = (x - a.getX()) / (b.getX() - a.getX());
-                    Vertex ab = a.mul(1 - t1).add(b.mul(t1));
+            long start = (long) Math.max(Math.ceil(a.getX()), 0);
+            long end = (long) Math.min(b.getX(), raster.getWidth() - 1);
+            for (long x = start; x <= end; x++) {
+                double t1 = (x - a.getX()) / (b.getX() - a.getX());
+                Vertex ab = a.mul(1 - t1).add(b.mul(t1));
 
 
-                    drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
-                }
-            } else if (a.getY() > b.getY()) {
-                Vertex temp = a;
-                a = b;
-                b = temp;
-
-
-                long start = (long) Math.max(Math.ceil(a.getY()), 0);
-                long end = (long) Math.min(b.getY(), raster.getHeight() - 1);
-                for (long y = start; y <= end; y++) {
-                    double t1 = (y - a.getY()) / (b.getY() - a.getY());
-                    Vertex ab = a.mul(1 - t1).add(b.mul(t1));
-
-
-                    drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
-
-
-                }
+                drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
             }
 
         }
@@ -322,7 +297,6 @@ public class RendererZBuffer implements GPURenderer {
 
             double t2 = (y2 - c.getY()) / (a.getY() - c.getY());
             Vertex ca = c.mul(1 - t2).add(a.mul(t2));
-
             fillLine(y2, ca, bc);
         }
 

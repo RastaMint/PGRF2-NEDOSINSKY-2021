@@ -28,7 +28,7 @@ public class Controller3D {
     private int xpressed;
     private int ypressed;
     private boolean perspektiva;
-    private boolean dratovyModel;
+    public boolean dratovyModel;
 
     public Controller3D(Panel panel) {
         this.panel = panel;
@@ -248,6 +248,10 @@ public class Controller3D {
         );
     }
 
+    public boolean isDratovyModel() {
+        return dratovyModel;
+    }
+
     private void initListeners(Panel panel) {
         panel.addMouseListener(new MouseAdapter() {
             @Override
@@ -337,8 +341,10 @@ public class Controller3D {
                     }
                 } else if (e.getKeyCode() == KeyEvent.VK_Q) {
                     if (dratovyModel) {
+                        display();
                         dratovyModel = false;
                     } else {
+                        display();
                         dratovyModel = true;
                     }
                 } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
