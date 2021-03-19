@@ -1,8 +1,7 @@
 package utery_17_25_c04.model;
 
-import transforms.Col;
-import transforms.Point3D;
-import transforms.Vec3D;
+import utery_17_25_c04.transforms.Col;
+import utery_17_25_c04.transforms.Point3D;
 
 import java.util.Optional;
 

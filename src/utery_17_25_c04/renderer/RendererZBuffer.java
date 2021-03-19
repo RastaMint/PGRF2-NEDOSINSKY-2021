@@ -1,6 +1,6 @@
 package utery_17_25_c04.renderer;
 
-import transforms.*;
+import utery_17_25_c04.transforms.*;
 import utery_17_25_c04.model.Element;
 import utery_17_25_c04.model.TopologyType;
 import utery_17_25_c04.model.Vertex;
@@ -94,9 +94,7 @@ public class RendererZBuffer implements GPURenderer {
 
             drawLine(va, vb);
 
-        }
-
-         else {
+        } else {
             // vidíme celý trojúhelník (podle Z)
             drawLine(a, b);
         }
@@ -115,26 +113,78 @@ public class RendererZBuffer implements GPURenderer {
         a = transformToWindow(a);
         b = transformToWindow(b);
         //rozvětvit dle řídící osy
-        //if(){}
+        if (a.getX() < b.getX()) {
 
-        if (a.getY() > b.getY()) {
-            Vertex temp = a;
-            a = b;
-            b = temp;
+
+            if (a.getY() > b.getY()) {
+                Vertex temp = a;
+                a = b;
+                b = temp;
+
+
+                long start = (long) Math.max(Math.ceil(a.getY()), 0);
+                long end = (long) Math.min(b.getY(), raster.getHeight() - 1);
+                for (long y = start; y <= end; y++) {
+                    double t1 = (y - a.getY()) / (b.getY() - a.getY());
+                    Vertex ab = a.mul(1 - t1).add(b.mul(t1));
+
+
+                    drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
+                }
+            } else if (a.getY() > b.getY()) {
+                Vertex temp = a;
+                a = b;
+                b = temp;
+
+
+                long start = (long) Math.max(Math.ceil(a.getX()), 0);
+                long end = (long) Math.min(b.getX(), raster.getHeight() - 1);
+                for (long x = start; x <= end; x++) {
+                    double t1 = (x - a.getX()) / (b.getX() - a.getX());
+                    Vertex ab = a.mul(1 - t1).add(b.mul(t1));
+
+
+                    drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
+                }
+
+            }
+        } else if (a.getX() > b.getX()) {
+            if (a.getY() < b.getY()) {
+                Vertex temp = a;
+                a = b;
+                b = temp;
+
+
+                long start = (long) Math.max(Math.ceil(a.getX()), 0);
+                long end = (long) Math.min(b.getX(), raster.getHeight() - 1);
+                for (long x = start; x <= end; x++) {
+                    double t1 = (x - a.getX()) / (b.getX() - a.getX());
+                    Vertex ab = a.mul(1 - t1).add(b.mul(t1));
+
+
+                    drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
+                }
+            } else if (a.getY() > b.getY()) {
+                Vertex temp = a;
+                a = b;
+                b = temp;
+
+
+                long start = (long) Math.max(Math.ceil(a.getY()), 0);
+                long end = (long) Math.min(b.getY(), raster.getHeight() - 1);
+                for (long y = start; y <= end; y++) {
+                    double t1 = (y - a.getY()) / (b.getY() - a.getY());
+                    Vertex ab = a.mul(1 - t1).add(b.mul(t1));
+
+
+                    drawPixel((int) Math.round(ab.getX()), (int) Math.round(ab.getY()), ab.getZ(), ab.getColor());
+
+
+                }
+            }
+
         }
 
-        long start = (long) Math.max(Math.ceil(a.getY()), 0);
-        long end = (long) Math.min(b.getY(), raster.getHeight() - 1);
-        for (long y = start; y <= end; y++) {
-            double t1 = (y - a.getY()) / (b.getY() - a.getY());
-            Vertex ab = a.mul(1 - t1).add(b.mul(t1));
-
-//            double t2 = (y - a.getY()) / (b.getY() - a.getY());
-//            Vertex ba = a.mul(1 - t2).add(b.mul(t2));
-
-
-            drawPixel((int)Math.round(ab.getX()),(int)Math.round(ab.getY()),ab.getZ(),ab.getColor());
-        }
 
     }
 
@@ -149,7 +199,7 @@ public class RendererZBuffer implements GPURenderer {
         // 2. ořezání
         if ((a.getX() > a.getW() && b.getX() > b.getW() && c.getX() > c.getW()) || (a.getX() < -a.getW() && b.getX() < -b.getW() && c.getX() < -c.getW())
                 || (a.getY() > a.getW() && b.getY() > b.getW() && c.getY() > c.getW()) || (a.getY() < -a.getW() && b.getY() < -b.getW() && c.getY() < -c.getW())
-        || (a.getZ() < 0 && b.getZ() < 0 && c.getZ() < 0) || (a.getZ() > a.getW() && b.getZ() > b.getW() && c.getZ() > c.getW())) {
+                || (a.getZ() < 0 && b.getZ() < 0 && c.getZ() < 0) || (a.getZ() > a.getW() && b.getZ() > b.getW() && c.getZ() > c.getW())) {
             return;
         }
         // ořezat trojúhelníky, které jsou CELÉ mimo zobrazovací objem

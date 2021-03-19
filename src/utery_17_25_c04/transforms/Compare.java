@@ -1,4 +1,4 @@
-package transforms;
+package utery_17_25_c04.transforms;
 
 public class Compare {
 	protected static final double EPSILON = 1e-15;

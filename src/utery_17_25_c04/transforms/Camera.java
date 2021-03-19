@@ -1,4 +1,4 @@
-package transforms;
+package utery_17_25_c04.transforms;
 
 import java.util.Locale;
 
@@ -246,7 +246,7 @@ public class Camera {
 	}
 
 	/**
-	 * Returns the view matrix that transforms coordinates from the world
+	 * Returns the view matrix that utery_17_25_c04.transforms coordinates from the world
 	 * coordinate set to the camera coordinate set
 	 * 
 	 * @return view matrix

@@ -1,6 +1,6 @@
 package utery_17_25_c04.renderer;
 
-import transforms.Mat4;
+import utery_17_25_c04.transforms.Mat4;
 import utery_17_25_c04.model.Element;
 import utery_17_25_c04.model.Vertex;
 

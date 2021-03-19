@@ -1,21 +1,21 @@
-package transforms;
+package utery_17_25_c04.transforms;
 
 /**
- * A 3x3 matrix of right-handed rotation about y-axis
+ * A 4x4 matrix of right-handed rotation about y-axis
  * 
  * @author PGRF FIM UHK 
  * @version 2016
  */
-public class Mat3RotY extends Mat3Identity {
+public class Mat4RotY extends Mat4Identity {
 
 	/**
-	 * Creates a 3x3 transformation matrix equivalent to right-handed rotation
+	 * Creates a 4x4 transformation matrix equivalent to right-handed rotation
 	 * about y-axis
 	 * 
 	 * @param alpha
 	 *            rotation angle in radians
 	 */
-	public Mat3RotY(final double alpha) {
+	public Mat4RotY(final double alpha) {
 		mat[0][0] = Math.cos(alpha);
 		mat[2][2] = Math.cos(alpha);
 		mat[2][0] = Math.sin(alpha);
