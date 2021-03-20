@@ -25,10 +25,10 @@ public class Controller3D {
 
     private Mat4 model, projection;
     private Camera camera;
-    private int xpressed;
-    private int ypressed;
+    private int xPressed;
+    private int yPressed; // camelCase notace
     private boolean perspektiva;
-    public boolean dratovyModel;
+    private boolean wiredModel;
 
     public Controller3D(Panel panel) {
         this.panel = panel;
@@ -248,8 +248,8 @@ public class Controller3D {
         );
     }
 
-    public boolean isDratovyModel() {
-        return dratovyModel;
+    public boolean isWiredModel() {
+        return wiredModel;
     }
 
     private void initListeners(Panel panel) {
@@ -261,30 +261,28 @@ public class Controller3D {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                xpressed = e.getX();
-                ypressed = e.getY();
+                xPressed = e.getX();
+                yPressed = e.getY();
             }
         });
         panel.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (xpressed < e.getX()) {
-                    camera = camera.addAzimuth(-(e.getX() - xpressed) / 1000.0);
-                    xpressed = e.getX();
-                } else if (e.getX() < xpressed) {
-                    camera = camera.addAzimuth((xpressed - e.getX()) / 1000.0);
-                    xpressed = e.getX();
+                if (xPressed < e.getX()) {
+                    camera = camera.addAzimuth(-(e.getX() - xPressed) / 1000.0);
+                    xPressed = e.getX();
+                } else if (e.getX() < xPressed) {
+                    camera = camera.addAzimuth((xPressed - e.getX()) / 1000.0);
+                    xPressed = e.getX();
                 }
-                if (ypressed < e.getY()) {
-                    camera = camera.addZenith(-(e.getY() - ypressed) / 1000.0);
-                    ypressed = e.getY();
-                } else if (e.getY() < ypressed) {
-                    camera = camera.addZenith((ypressed - e.getY()) / 1000.0);
-                    ypressed = e.getY();
+                if (yPressed < e.getY()) {
+                    camera = camera.addZenith(-(e.getY() - yPressed) / 1000.0);
+                    yPressed = e.getY();
+                } else if (e.getY() < yPressed) {
+                    camera = camera.addZenith((yPressed - e.getY()) / 1000.0);
+                    yPressed = e.getY();
                 }
                 display();
-
-
             }
         });
 
@@ -301,8 +299,6 @@ public class Controller3D {
 
                 }
                 display();
-
-
             }
         });
 
@@ -340,28 +336,26 @@ public class Controller3D {
                         );
                     }
                 } else if (e.getKeyCode() == KeyEvent.VK_Q) {
-                    if (dratovyModel) {
-                        display();
-                        dratovyModel = false;
+                    if (wiredModel) {
+                        //display(); // není nutné volat, volá se ještě na řádku 357
+                        wiredModel = false;
                     } else {
-                        display();
-                        dratovyModel = true;
+                        //display();
+                        wiredModel = true;
                     }
                 } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     camera = camera.up(0.5);
                 } else if (e.getKeyCode() == KeyEvent.VK_C) {
                     camera = camera.down(0.5);
                 } else if (e.getKeyCode() == KeyEvent.VK_R) {
-                    Mat4 matrotate = new Mat4RotX(0.1);
-                    model = model.mul(matrotate);
+                    Mat4 matRotate = new Mat4RotX(0.1);
+                    model = model.mul(matRotate); // camelCase
                 } else if (e.getKeyCode() == KeyEvent.VK_T) {
-                    Mat4Transl mattransl = new Mat4Transl(1, 0, 0);
-                    model = model.mul(mattransl);
+                    Mat4Transl matTransl = new Mat4Transl(1, 0, 0);
+                    model = model.mul(matTransl);
                 }
                 display();
             }
-
-
         });
     }
 

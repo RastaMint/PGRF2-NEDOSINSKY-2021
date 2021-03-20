@@ -1,14 +1,12 @@
 package utery_17_25_c04.renderer;
 
-import utery_17_25_c04.controller.Controller3D;
-import utery_17_25_c04.transforms.*;
 import utery_17_25_c04.model.Element;
 import utery_17_25_c04.model.TopologyType;
 import utery_17_25_c04.model.Vertex;
 import utery_17_25_c04.rasterize.DepthBuffer;
 import utery_17_25_c04.rasterize.Raster;
+import utery_17_25_c04.transforms.*;
 
-import javax.naming.ldap.Control;
 import java.util.List;
 import java.util.Optional;
 
